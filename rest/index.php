@@ -8,7 +8,7 @@ require_once('../vendor/autoload.php');
 
 Flight::register('todoDao', 'ToDoDao');
 
-Flight::route("GET /test", function(){ 
+Flight::route("GET /test", function(){
 Flight::todoDao()->test();
 
 });

@@ -6,4 +6,4 @@ $description= $_REQUEST["description"]
 $created=$_REQUEST["created"];
 
 $dao=new ToDoDao();
-$dao->update($id,$description,$created);
+$dao->update($id,$description,$created)

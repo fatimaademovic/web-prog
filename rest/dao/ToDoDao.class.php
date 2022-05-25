@@ -10,39 +10,39 @@ public function __construct(){
   $password = "123456";
   $schema="database";
 
-    $this ->conn = new PDO("mysql:host=127.0.0.1;port=3306;dbname=$schema", $username, $password);
-    // set the PDO error mode to exception
-    $this ->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  $this ->conn = new PDO("mysql:host=127.0.0.1;port=3306;dbname=$schema", $username, $password);
+  // set the PDO error mode to exception
+  $this ->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 
-}
+  }
 
-public function get_all(){
-  $stmt =$this-> $conn->prepare("SELECT FROM * todo");
+  public function get_all(){
+  $stmt =$this-> $conn->prepare("SELECT FROM * todos");
   $stmt->execute();
   return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+  }
 
-public function get_by_id($id){
+  public function get_by_id($id){
   $stmt = $this->conn->prepare("SELECT * FROM todos WHERE id = :id");
   $stmt->execute(['id' => $id]);
   $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
   return reset($result);
 
-}
+  }
 
-public function add($todo){
+  public function add($todo){
   $stmt = $this->conn->prepare("INSERT INTO todos (description, created) VALUES ('$description', '$created')");
-    $stmt->execute();
-}
+  $stmt->execute();
+  }
 
-public function delete(){
+  public function delete(){
   $stmt = $this->conn->prepare("DELETE FROM todos WHERE id=$id");
- $stmt->execute();
-}
+  $stmt->execute();
+  }
 
-public function update($todo){
+  public function update($todo){
   $stmt = $this->conn->prepare("UPDATE todos SET description='$description', created='$created' WHERE id=$id");
-    $stmt->execute();
-}
-}
+  $stmt->execute();
+  }
+  }

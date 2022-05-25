@@ -7,7 +7,7 @@ class FlightDao extends BaseDao{
   * constructor of dao class
   */
   public function __construct(){
-    parent::__construct("flights");
+    parent::__construct("country");
   }
 
 }
