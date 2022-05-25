@@ -3,75 +3,54 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once ("dao/ToDoDao.class.php");
-require_once('../vendor/autoload.php');
+/*use Firebase\JWT\JWT;
+use Firebase\JWT\Key;*/
 
-Flight::register('todoDao', 'ToDoDao');
+require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__.'/services/FlightService.php';
+require_once __DIR__.'/dao/FlightDao.php';
 
-Flight::route("GET /test", function(){
-Flight::todoDao()->test();
-
-});
-/*list all todo*/
-Flight::route("GET /todo", function(){
-Flight::json(Flight::todoDao()->get_all());
-
-});
-/*list individual todo*/
-Flight::route("GET/todos", function($id){
-Flight::json(Flight::todoDao()->get_by_id($id));
-
-});
-/** add todo i update*/
-
-Flight::route("POST/todos", function(){
-
-//$request=Flight::request;
-//print_r($request->data->getData());
-//$data=$request->data->getData();
-Flight::json(Flight::todoDao()->add(Flight::request()->data->getData()));
-//Flight::json($todo);
-
-
-});
-
-/*update */
-Flight::route("PUT/todos/@id", function($id){
-
-$data= Flight::request()->data->getData();
-$data["id"]=$id;
-//Flight::todoDao()->update($id, $data[description], $data[created]);
-Flight::todoDao()->update($data);
-Flight::json($data);
-//print_r($id);  printat ce npr 18 ovo ili flight json ukljucen
-
+Flight::register('flightDao', 'FlightDao');
 Flight::register('flightService', 'FlightService');
 
+/*
+Flight::map('error', function(Exception $ex){
+    // Handle error
+    Flight::json(['message' => $ex->getMessage()], 500);
 });
+*/
+/*
+// middleware method for login
+Flight::route('/*', function(){
+  //return TRUE;
+  //perform JWT decode
+  $path = Flight::request()->url;
+  if ($path == '/login' || $path == '/docs.json') return TRUE; // exclude login route from middleware
 
+  $headers = getallheaders();
+  if (@!$headers['Authorization']){
+    Flight::json(["message" => "Authorization is missing"], 403);
+    return FALSE;
+  }else{
+    try {
+      $decoded = (array)JWT::decode($headers['Authorization'], new Key(Config::JWT_SECRET(), 'HS256'));
+      Flight::set('user', $decoded);
+      return TRUE;
+    } catch (\Exception $e) {
+      Flight::json(["message" => "Authorization token is not valid"], 403);
+      return FALSE;
+    }
+  }
+});*/
 
+/* REST API documentation endpoint */
+/*Flight::route('GET /docs.json', function(){
+  $openapi = \OpenApi\scan('routes');
+  header('Content-Type: application/json');
+  echo $openapi->toJson();
+});*/
 
-
-/*delete*/
-Flight::route("DELETE/todos/@id", function($id){
-
-Flight::todoDao()->delete($id);
-Flight::json(["message"=>"deleted"]);
-
-
-});
-
-
-Flight::route("/dorian", function(){
-  echo 'hello worldbbb dorian';
-});
-
-Flight::route("/tin/@name", function($name){
-  echo 'hello worldbbb tin'. $name;
-});
-
-
-Flight::start();
+require_once __DIR__.'/routes/FlightRoutes.php';
 
 Flight::start();
 ?>
